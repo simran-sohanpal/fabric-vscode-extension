@@ -1,30 +1,15 @@
-# Hyperledger Composer Extension for VSCode
+# IBM Blockchain Extension for VSCode
 
-Validate Composer model files that define the structure of your business network in terms of Assets, Participants and Transactions.
-
-The extension parses Composer model (.cto) files and reports any validation errors. It is currently in beta; please raise any problems you find as an [issue](https://github.com/hyperledger/composer-vscode-plugin/issues).
+Code, Discover and Test Fabric smart contracts
 
 
 ## Manual Build and Install
 
-Generate the installable VSIX file:
-
 ```
-git clone https://github.com/hyperledger/composer-vscode-plugin.git
-cd composer-vscode-plugin/server
-npm install
-npm run compile:server
+git clone https://github.ibm.com/IBM-Blockchain/fabric-vscode-extension.git
 cd ../client
 npm install
-npm run package:vsix
 ```
-
-1. Launch VSCode
-2. View > Extensions
-3. Press the ... and select "Install from VSIX"
-4. Browse to the VSIX file
-5. Install and restart VSCode
-6. Open a .cto file
 
 # Travis CI build
 Developers no longer need a manual build, once you have pulled a request from your private Github repository. The build will be automatically performed by Travis.
@@ -33,7 +18,7 @@ The public release version number is defined in the Client package.json file.
 
 ## Publish Release
 Below are steps for publishing a release.
-1. Go to https://github.com/hyperledger/composer-vscode-plugin
+1. Go to https://github.ibm.com/IBM-Blockchain/fabric-vscode-extension
 2. Click Releases tab
 3. Click Draft a new release on the right
 4. Type a Tag version in the Tag version field. e.g. v0.5.7.1
@@ -51,7 +36,7 @@ Below are steps for publishing a release.
 1. Open Visual Studio Code in your desktop
 2. Open the Extensions by View-->Extensions or Ctrl(cmd)+Shift+x 
 3. Search for Composer
-4. The new published Hyperledger Composer 0.7.1 is showing on the list
+4. The new published version is showing on the list
 5. Click Install button to install it
 6. Update button will be shown if you have already installed the same plugin before.
 

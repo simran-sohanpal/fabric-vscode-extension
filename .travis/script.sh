@@ -19,4 +19,4 @@ set -o pipefail
 
 cd ./client
 
-npm test --silent
+npm test
