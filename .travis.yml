@@ -9,11 +9,15 @@ node_js:
 dist: trusty
 
 before_install:
-    - if [ $TRAVIS_OS_NAME == "linux" ]; then
-        export CXX="g++-4.9" CC="gcc-4.9" DISPLAY=:99.0;
-        sh -e /etc/init.d/xvfb start;
-        sleep 3;
-      fi
+     - if [ $TRAVIS_OS_NAME == "linux" ]; then
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+          sudo apt-get update
+          sudo apt-get install gcc-4.9 g++-4.9
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.9
+          export CXX="g++-4.9" CC="gcc-4.9" DISPLAY=:99.0;
+          sh -e /etc/init.d/xvfb start;
+          sleep 3;
+        fi
 install: |
       ./.travis/install.sh
 script: |
@@ -25,13 +29,3 @@ deploy:
      on:
        all_branches: true
 cache: false
-
-notifications:
-  webhooks:
-    urls:
-      - https://chat.hyperledger.org/hooks/BG3PeSerMSWRDSceE/GPCnCSqxMoyfqaTvLePSGudWjoCBwAcCT6bAKYRjK2sKSCM9
-    on_success: always # default: always
-    on_failure: always # default: always
-    on_start: always   # default: never
-    on_cancel: always # default: always
-    on_error: always # default: always
