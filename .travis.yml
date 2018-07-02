@@ -3,29 +3,24 @@ os:
   - osx
   - linux
 
-language: node_js
-node_js:
-    - '8'
-dist: trusty
-
 before_install:
      - if [ $TRAVIS_OS_NAME == "linux" ]; then
-          sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-          sudo apt-get update
-          sudo apt-get install gcc-4.9 g++-4.9
-          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.9
-          export CXX="g++-4.9" CC="gcc-4.9" DISPLAY=:99.0;
-          sh -e /etc/init.d/xvfb start;
-          sleep 3;
+         sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+         sudo apt-get update
+         sudo apt-get install gcc-4.9 g++-4.9
+         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 60 --slave /usr/bin/g++ g++ /usr/bin/g++-4.9
+         export CXX="g++-4.9" CC="gcc-4.9" DISPLAY=:99.0;
+         sh -e /etc/init.d/xvfb start;
+         sleep 3;
         fi
 install: |
       ./.travis/install.sh
 script: |
       ./.travis/script.sh
-deploy:
-     provider: script
-     script: ./.travis/deploy.sh
-     skip_cleanup: true
-     on:
-       all_branches: true
+#deploy:
+#     provider: script
+#     script: ./.travis/deploy.sh
+#     skip_cleanup: true
+#     on:
+#       all_branches: true
 cache: false

@@ -121,7 +121,7 @@
     "tslint-loader": "^3.3.0",
     "typescript": "^2.6.2",
     "vsce": "^1.39.0",
-    "vscode": "^1.1.5"
+    "vscode": "1.1.18"
   },
   "dependencies": {
     "fabric-ca-client": "1.2.0-snapshot.79",

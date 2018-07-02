@@ -14,8 +14,6 @@
 
 'use strict';
 
-console.log('BANANA');
-
 import * as fs from 'fs';
 import * as glob from 'glob';
 import * as paths from 'path';
@@ -24,8 +22,6 @@ import * as paths from 'path';
 const istanbul = require('istanbul');
 const Mocha = require('mocha');
 const remapIstanbul = require('remap-istanbul');
-
-console.log('FISH');
 
 // Linux: prevent a weird NPE when mocha on Linux requires the window size from the TTY
 // Since we are not running in a tty environment, we just implementt he method statically
@@ -40,8 +36,6 @@ let mocha = new Mocha({
     ui: 'tdd',
     useColors: true,
 });
-
-console.log('ONE');
 
 function configure(mochaOpts): void {
     mocha = new Mocha(mochaOpts);
@@ -66,7 +60,6 @@ function _readCoverOptions(testsRoot: string): ITestRunnerOptions {
 }
 
 function run(testsRoot, clb): any {
-    console.log('TWO');
     // Enable source map support
     require('source-map-support').install();
 
@@ -128,9 +121,6 @@ class CoverageRunner {
         if (!options.relativeSourcePath) {
             return endRunCallback('Error - relativeSourcePath must be defined for code coverage to work');
         }
-
-        console.log('THREE');
-
     }
 
     public setupCoverage(): void {

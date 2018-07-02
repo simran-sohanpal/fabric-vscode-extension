@@ -38,23 +38,18 @@ export class BlockchainNetworkExplorerProvider implements TreeDataProvider<Block
     private connection: FabricClientConnection = null;
     private connected: boolean = false;
 
-    constructor() {
-        console.log('BANANA');
-    }
-
     refresh(): void {
-        console.log('FISH');
+        console.log('refresh');
         this._onDidChangeTreeData.fire();
     }
 
     test(data): Promise<void> {
-        console.log('TEST', data);
+        console.log('test', data);
         return GenerateTests.createFile();
     }
 
     async connect(config: ConfigTreeItem): Promise<void> {
-        console.log('CONNECT', config);
-        console.log('CONNECT');
+        console.log('connect', config);
 
         this.connection = new FabricClientConnection(config);
         await this.connection.connect();
@@ -64,16 +59,12 @@ export class BlockchainNetworkExplorerProvider implements TreeDataProvider<Block
     }
 
     getTreeItem(element: BlockchainTreeItem): TreeItem {
-        console.log('GET TREE ITEM', element);
-        if (element.contextValue === 'blockchain-channel-item') {
-            console.log('CLICK ON');
-        }
-
+        console.log('getTreeItem', element);
         return element;
     }
 
     getChildren(element?: BlockchainTreeItem): Thenable<BlockchainTreeItem[]> {
-        console.log('GET CHILDREN', element);
+        console.log('getChildren', element);
 
         if (element) {
             if (element.contextValue === 'blockchain-channel-item') {

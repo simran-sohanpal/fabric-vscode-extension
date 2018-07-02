@@ -15,7 +15,7 @@
 import { window, workspace, ConfigurationTarget } from 'vscode';
 
 export async function addConfig(): Promise<void> {
-    console.log('ADD CONFIG');
+    console.log('addConfig');
     const connectionName = await showInputBox('Enter a name for the connection');
     const connectionProfilePath = await showInputBox('Enter a file path to the connection profile json file');
     const certificatePath = await showInputBox('Enter a file path to the certificate file');

@@ -23,6 +23,11 @@ npm install
 node ./node_modules/.bin/electron-rebuild -v 1.7
 
 ls ./node_modules/grpc/src/node/extension_binary
-mv ./node_modules/grpc/src/node/extension_binary/electron-v1.7-linux-x64-glibc ./node_modules/grpc/src/node/extension_binary/node-v54-linux-x64-glibc
+
+if [ $TRAVIS_OS_NAME == "linux" ]; then
+    mv ./node_modules/grpc/src/node/extension_binary/electron-v1.7-linux-x64-glibc ./node_modules/grpc/src/node/extension_binary/node-v54-linux-x64-glibc
+else
+    mv ./node_modules/grpc/src/node/extension_binary/electron-v1.7-darwin-x64-unknown ./node_modules/grpc/src/node/extension_binary/node-v54-darwin-x64-unknown
+fi
 
 npm run compile
