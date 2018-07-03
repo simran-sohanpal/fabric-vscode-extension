@@ -12,16 +12,36 @@
  * limitations under the License.
 */
 'use strict';
-import { window, workspace, ConfigurationTarget } from 'vscode';
+import * as vscode from 'vscode';
 
-export async function addConfig(): Promise<void> {
-    console.log('addConfig');
+// TODO: make it save where have got up to
+export async function addConnection(): Promise<{} | void> {
+    console.log('addConnection');
     const connectionName = await showInputBox('Enter a name for the connection');
+
+    if (!connectionName) {
+        return Promise.resolve();
+    }
+
     const connectionProfilePath = await showInputBox('Enter a file path to the connection profile json file');
+
+    if (!connectionProfilePath) {
+        return Promise.resolve();
+    }
+
     const certificatePath = await showInputBox('Enter a file path to the certificate file');
+
+    if (!certificatePath) {
+        return Promise.resolve();
+    }
+
     const privateKeyPath = await showInputBox('Enter a file path to the private key file');
 
-    const connections: Array<any> = workspace.getConfiguration().get('fabric.connections');
+    if (!privateKeyPath) {
+        return Promise.resolve();
+    }
+
+    const connections: Array<any> = vscode.workspace.getConfiguration().get('fabric.connections');
     connections.push({
         name: connectionName,
         connectionProfilePath,
@@ -29,12 +49,13 @@ export async function addConfig(): Promise<void> {
         privateKeyPath
     });
 
-    return workspace.getConfiguration().update('fabric.connections', connections, ConfigurationTarget.Global);
+    return vscode.workspace.getConfiguration().update('fabric.connections', connections, vscode.ConfigurationTarget.Global);
 }
 
 function showInputBox(question: string): Thenable<string | undefined> {
     const inputBoxOptions = {
         prompt: question
     };
-    return window.showInputBox(inputBoxOptions);
+
+    return vscode.window.showInputBox(inputBoxOptions);
 }

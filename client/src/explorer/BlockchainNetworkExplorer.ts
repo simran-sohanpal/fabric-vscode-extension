@@ -30,6 +30,9 @@ import { GenerateTests } from './generateTests';
 
 export class BlockchainNetworkExplorerProvider implements TreeDataProvider<BlockchainTreeItem> {
 
+    // only for testing so can get the updated tree
+    public tree: Array<BlockchainTreeItem> = [];
+
     private _onDidChangeTreeData: EventEmitter<BlockchainTreeItem | undefined> = new EventEmitter<BlockchainTreeItem | undefined>();
     // tslint:disable-next-line member-ordering
     readonly onDidChangeTreeData: Event<BlockchainTreeItem | undefined> = this._onDidChangeTreeData.event;
@@ -63,7 +66,7 @@ export class BlockchainNetworkExplorerProvider implements TreeDataProvider<Block
         return element;
     }
 
-    getChildren(element?: BlockchainTreeItem): Thenable<BlockchainTreeItem[]> {
+    async getChildren(element?: BlockchainTreeItem): Promise<BlockchainTreeItem[]> {
         console.log('getChildren', element);
 
         if (element) {
@@ -77,10 +80,12 @@ export class BlockchainNetworkExplorerProvider implements TreeDataProvider<Block
         }
 
         if (this.connection && this.connected) {
-            return this.createConnectedTree();
+            this.tree = await this.createConnectedTree();
         } else {
-            return this.createConfigTree();
+            this.tree = await this.createConfigTree();
         }
+
+        return this.tree;
     }
 
     // private createInstalledChaincodeTree(peerElement: PeerTreeItem) : Promise<Array<InstalledChainCodeTreeItem>> {
@@ -157,8 +162,20 @@ export class BlockchainNetworkExplorerProvider implements TreeDataProvider<Block
             }));
         });
 
-        // TODO: link this with add config command
-        tree.push(new AddConfigTreeItem('Add new network'));
+        tree.sort((configA, configB) => {
+            if (configA.label > configB.label) {
+                return 1;
+            } else if (configA.label < configB.label) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+
+        tree.push(new AddConnectionTreeItem('Add new network', {
+            command: 'blockchainExplorer.addConnectionEntry',
+            title: ''
+        }));
 
         return Promise.resolve(tree);
     }
@@ -201,7 +218,7 @@ class ConfigTreeItem extends BlockchainTreeItem {
     }
 }
 
-class AddConfigTreeItem extends BlockchainTreeItem {
+class AddConnectionTreeItem extends BlockchainTreeItem {
 
     contextValue = 'blockchain-add-config-item';
 
