@@ -19,7 +19,7 @@ import { ConnectionTreeItem } from '../explorer/model/ConnectionTreeItem';
 export async function deleteConnection(connectionItem: ConnectionTreeItem): Promise<{} | void> {
     console.log('deleteConnection');
 
-    let connectionToDelete;
+    let connectionToDelete: string;
 
     if (connectionItem) {
         connectionToDelete = connectionItem.connection.name;

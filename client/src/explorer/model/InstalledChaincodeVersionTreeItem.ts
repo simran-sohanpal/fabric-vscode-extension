@@ -15,10 +15,10 @@
 import * as vscode from 'vscode';
 import { BlockchainTreeItem } from './BlockchainTreeItem';
 
-export class PeerTreeItem extends BlockchainTreeItem {
-    contextValue = 'blockchain-peer-item';
+export class InstalledChainCodeVersionTreeItem extends BlockchainTreeItem {
+    contextValue = 'blockchain-installed-chaincode-version-item';
 
-    constructor(private readonly peerName: any) {
-        super(peerName, vscode.TreeItemCollapsibleState.Collapsed);
+    constructor(private readonly version: string) {
+        super(version, vscode.TreeItemCollapsibleState.None);
     }
 }

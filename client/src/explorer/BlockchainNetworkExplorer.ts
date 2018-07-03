@@ -26,38 +26,44 @@ import { AddConnectionTreeItem } from './model/AddConnectionTreeItem';
 import { ConnectionIdentityTreeItem } from './model/ConnectionIdentityTreeItem';
 import { BlockchainTreeItem } from './model/BlockchainTreeItem';
 import { ConnectionTreeItem } from './model/ConnectionTreeItem';
+import { ChainCodeTreeItem } from './model/ChainCodeTreeItem';
+import { InstantiatedChainCodesTreeItem } from './model/InstantiatedChaincodesTreeItem';
+import { PeersTreeItem } from './model/PeersTreeItem';
+import { InstalledChainCodeTreeItem } from './model/InstalledChainCodeTreeItem';
+import { InstalledChainCodeVersionTreeItem } from './model/InstalledChaincodeVersionTreeItem';
 
 export class BlockchainNetworkExplorerProvider implements vscode.TreeDataProvider<BlockchainTreeItem> {
 
     // only for testing so can get the updated tree
     public tree: Array<BlockchainTreeItem> = [];
 
-    private _onDidChangeTreeData: vscode.EventEmitter<BlockchainTreeItem | undefined> = new vscode.EventEmitter<BlockchainTreeItem | undefined>();
+    private _onDidChangeTreeData: vscode.EventEmitter<any | undefined> = new vscode.EventEmitter<any | undefined>();
     // tslint:disable-next-line member-ordering
-    readonly onDidChangeTreeData: vscode.Event<BlockchainTreeItem | undefined> = this._onDidChangeTreeData.event;
+    readonly onDidChangeTreeData: vscode.Event<any | undefined> = this._onDidChangeTreeData.event;
 
-    // TODO: not sure if need both of these
     private connection: FabricClientConnection = null;
-    private connected: boolean = false;
 
-    refresh(): void {
-        console.log('refresh');
+    async refresh(connection?: FabricClientConnection): Promise<void> {
+        console.log('refresh', connection);
+        if (connection) {
+            this.connection = connection;
+            // This controls which menu buttons appear
+            await vscode.commands.executeCommand('setContext', 'blockchain-connected', true);
+        }
         this._onDidChangeTreeData.fire();
+    }
+
+    async disconnect(): Promise<void> {
+        console.log('disconnect');
+        this.connection = null;
+        // This controls which menu buttons appear
+        await vscode.commands.executeCommand('setContext', 'blockchain-connected', false);
+        return this.refresh();
     }
 
     test(data): Promise<void> {
         console.log('test', data);
         return GenerateTests.createFile();
-    }
-
-    async connect(connection: ConnectionTreeItem): Promise<void> {
-        console.log('connect', connection);
-
-        this.connection = new FabricClientConnection(connection);
-        await this.connection.connect();
-        this.connected = true;
-
-        this.refresh();
     }
 
     getTreeItem(element: BlockchainTreeItem): vscode.TreeItem {
@@ -68,42 +74,93 @@ export class BlockchainNetworkExplorerProvider implements vscode.TreeDataProvide
     async getChildren(element?: BlockchainTreeItem): Promise<BlockchainTreeItem[]> {
         console.log('getChildren', element);
 
-        if (element) {
-            if (element.contextValue === 'blockchain-connection-item') {
-                return this.createConnectionIdentityTree(element as ConnectionTreeItem);
-            }
-            if (element.contextValue === 'blockchain-channel-item') {
-                return this.createPeerTree(element as ChannelTreeItem);
+        try {
+
+            if (element) {
+                if (element instanceof ConnectionTreeItem) {
+                    this.tree = await this.createConnectionIdentityTree(element as ConnectionTreeItem);
+                }
+
+                if (element instanceof ChannelTreeItem) {
+                    this.tree = [];
+                    const channelElement: ChannelTreeItem = element as ChannelTreeItem;
+                    this.tree.push(new PeersTreeItem('Peers', channelElement.peers));
+                    this.tree.push(new InstantiatedChainCodesTreeItem('Instantiated Chaincodes', element.label));
+                }
+
+                if (element instanceof PeersTreeItem) {
+                    this.tree = await this.createPeerTree(element as PeersTreeItem);
+                }
+
+                if (element instanceof PeerTreeItem) {
+                    this.tree = await this.createInstalledChaincodeTree(element as PeerTreeItem);
+                }
+
+                if (element instanceof InstantiatedChainCodesTreeItem) {
+                    this.tree = await this.createInstantiatedChaincodeTree(element as InstantiatedChainCodesTreeItem);
+                }
+
+                if (element instanceof InstalledChainCodeTreeItem) {
+                    this.tree = await this.createInstalledChaincodeVersionTree(element as InstalledChainCodeTreeItem);
+                }
+
+                return this.tree;
             }
 
-            if (element.contextValue === 'blockchain-peer-item') {
-                // return this.createInstalledChaincodeTree(element as PeerTreeItem);
+            if (this.connection) {
+                this.tree = await this.createConnectedTree();
+            } else {
+                this.tree = await this.createConnectionTree();
             }
-        }
 
-        if (this.connection && this.connected) {
-            this.tree = await this.createConnectedTree();
-        } else {
-            this.tree = await this.createConnectionTree();
+        } catch (error) {
+            vscode.window.showErrorMessage(error.message);
         }
 
         return this.tree;
     }
 
-    // private createInstalledChaincodeTree(peerElement: PeerTreeItem) : Promise<Array<InstalledChainCodeTreeItem>> {
-    // 	const tree = [];
+    private createInstalledChaincodeVersionTree(chaincodeElement: InstalledChainCodeTreeItem): Promise<Array<InstalledChainCodeVersionTreeItem>> {
+        console.log('createInstalledChaincodeVersionTree', chaincodeElement);
+        const tree: Array<InstalledChainCodeVersionTreeItem> = [];
 
-    // 	const peer = peerElement.peer;
+        chaincodeElement.versions.forEach((version) => {
+            tree.push(new InstalledChainCodeVersionTreeItem(version));
+        });
 
-    // 	this.connection.getInstalledChaincode(peer);
-    // }
+        return Promise.resolve(tree);
+    }
 
-    private createPeerTree(channelElement: ChannelTreeItem): Promise<Array<PeerTreeItem>> {
+    private async createInstalledChaincodeTree(peerElement: PeerTreeItem): Promise<Array<InstalledChainCodeTreeItem>> {
+        console.log('createInstalledChaincodeTree', peerElement);
+        const tree: Array<InstalledChainCodeTreeItem> = [];
+
+        const installedChainCodes: Map<string, Array<string>> = await this.connection.getInstalledChaincode(peerElement.label);
+        installedChainCodes.forEach((versions, name) => {
+            tree.push(new InstalledChainCodeTreeItem(name, versions));
+        });
+
+        return tree;
+    }
+
+    private async createInstantiatedChaincodeTree(instantiatedChainCodesElement: InstantiatedChainCodesTreeItem): Promise<Array<ChainCodeTreeItem>> {
+        console.log('createInstantiatedChaincodeTree', instantiatedChainCodesElement);
+        const tree: Array<ChainCodeTreeItem> = [];
+
+        const instantiatedChaincodes: Array<any> = await this.connection.getInstantiatedChaincode(instantiatedChainCodesElement.channel);
+
+        instantiatedChaincodes.forEach((instantiatedChaincode) => {
+            tree.push(new ChainCodeTreeItem(instantiatedChaincode.name + ' - ' + instantiatedChaincode.version));
+        });
+
+        return tree;
+    }
+
+    private createPeerTree(peersElement: PeersTreeItem): Promise<Array<PeerTreeItem>> {
+        console.log('createPeerTree', peersElement);
         const tree: Array<PeerTreeItem> = [];
 
-        const peers: Array<string> = channelElement.peers;
-
-        peers.forEach((peer) => {
+        peersElement.peers.forEach((peer) => {
             tree.push(new PeerTreeItem(peer));
         });
 
@@ -111,6 +168,7 @@ export class BlockchainNetworkExplorerProvider implements vscode.TreeDataProvide
     }
 
     private async createConnectedTree(): Promise<Array<ChannelTreeItem>> {
+        console.log('createConnectedTree');
         const tree: Array<ChannelTreeItem> = [];
 
         const channelMap: Map<string, Array<string>> = await this.createChannelMap();
@@ -122,26 +180,24 @@ export class BlockchainNetworkExplorerProvider implements vscode.TreeDataProvide
         return tree;
     }
 
-    private createChannelMap(): Promise<Map<string, Array<string>>> {
-        // TODO: this should not return actual peers should just return names
-        const allPeers = this.connection.getAllPeers();
+    private async createChannelMap(): Promise<Map<string, Array<string>>> {
+        console.log('createChannelMap');
+        const allPeerNames: Array<string> = await this.connection.getAllPeerNames();
 
-        const channelMap = new Map<string, Array<any>>();
-        return allPeers.reduce((promise: Promise<void>, peer) => {
+        const channelMap = new Map<string, Array<string>>();
+        return allPeerNames.reduce((promise: Promise<void>, peerName) => {
             return promise
                 .then(() => {
-                    // TODO: should just return channelNames
-                    return this.connection.getAllChannelsForPeer(peer.getName());
+                    return this.connection.getAllChannelsForPeer(peerName);
                 })
                 .then((channels: Array<any>) => {
-                    channels.forEach((channel) => {
-                        const channelName = channel.channel_id;
+                    channels.forEach((channelName: string) => {
                         let peers = channelMap.get(channelName);
                         if (peers) {
-                            peers.push(peer);
+                            peers.push(peerName);
                             channelMap.set(channelName, peers);
                         } else {
-                            peers = [peer];
+                            peers = [peerName];
                             channelMap.set(channelName, peers);
                         }
                     });
@@ -152,6 +208,7 @@ export class BlockchainNetworkExplorerProvider implements vscode.TreeDataProvide
     }
 
     private createConnectionIdentityTree(element: ConnectionTreeItem): Promise<ConnectionIdentityTreeItem[]> {
+        console.log('createConnectionIdentityTree', element);
         const tree: Array<ConnectionIdentityTreeItem> = [];
 
         element.connection.identities.forEach((identity) => {
@@ -159,7 +216,7 @@ export class BlockchainNetworkExplorerProvider implements vscode.TreeDataProvide
                 const cert: ParsedCertificate = new ParsedCertificate(identity.certificatePath);
                 const commonName: string = cert.getCommonName();
 
-                const connection = {
+                const fabricConnection = {
                     name: element.connection.name,
                     connectionProfilePath: element.connection.connectionProfilePath,
                     certificatePath: identity.certificatePath,
@@ -169,7 +226,7 @@ export class BlockchainNetworkExplorerProvider implements vscode.TreeDataProvide
                 const command = {
                     command: 'blockchainExplorer.connectEntry',
                     title: '',
-                    arguments: [connection]
+                    arguments: [fabricConnection]
                 };
 
                 tree.push(new ConnectionIdentityTreeItem(commonName, command));
@@ -183,6 +240,7 @@ export class BlockchainNetworkExplorerProvider implements vscode.TreeDataProvide
     }
 
     private createConnectionTree(): Promise<BlockchainTreeItem[]> {
+        console.log('createdConnectionTree');
         const tree: Array<BlockchainTreeItem> = [];
 
         const allConnections: Array<any> = this.getNetworkConnection();
@@ -195,11 +253,17 @@ export class BlockchainNetworkExplorerProvider implements vscode.TreeDataProvide
             if (connection.identities.length > 1) {
                 collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
             } else {
+                const fabricConnection = {
+                    connectionProfilePath: connection.connectionProfilePath,
+                    certificatePath: connection.identities[0].certificatePath,
+                    privateKeyPath: connection.identities[0].privateKeyPath
+                };
+
                 collapsibleState = vscode.TreeItemCollapsibleState.None;
                 command = {
                     command: 'blockchainExplorer.connectEntry',
                     title: '',
-                    arguments: [connection]
+                    arguments: [fabricConnection]
                 };
             }
 
@@ -228,6 +292,7 @@ export class BlockchainNetworkExplorerProvider implements vscode.TreeDataProvide
     }
 
     private getNetworkConnection(): Array<any> {
+        console.log('getNetworkConnection');
         return vscode.workspace.getConfiguration().get('fabric.connections');
     }
 }

@@ -51,13 +51,14 @@ describe('Extension Tests', () => {
         blockchainCommands.should.deep.equal([
             'blockchainExplorer.refreshEntry',
             'blockchainExplorer.connectEntry',
+            'blockchainExplorer.disconnectEntry',
             'blockchainExplorer.addConnectionEntry',
             'blockchainExplorer.deleteConnectionEntry',
             'blockchainExplorer.addConnectionIdentityEntry',
             'blockchainExplorer.testEntry']);
     });
 
-    it('should refresh the tree when a configuration is added', async () => {
+    it('should refresh the tree when a connection is added', async () => {
         await vscode.workspace.getConfiguration().update('fabric.connections', [], vscode.ConfigurationTarget.Global);
 
         await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
@@ -70,14 +71,14 @@ describe('Extension Tests', () => {
 
         const myConnection = {
             name: 'myConnection',
-            connectionProfilePath: path.join(rootPath, '../../test/data/connectionTwo/connection.json'),
+            connectionProfilePath: path.join(rootPath, '../test/data/connectionTwo/connection.json'),
             identities: [{
-                certificatePath: path.join(rootPath, '../../test/data/connectionTwo/credentials/certificate'),
-                privateKeyPath: path.join(rootPath, '../../test/data/connectionTwo/credentials/privateKey')
+                certificatePath: path.join(rootPath, '../test/data/connectionTwo/credentials/certificate'),
+                privateKeyPath: path.join(rootPath, '../test/data/connectionTwo/credentials/privateKey')
             }]
         };
 
-        await vscode.workspace.getConfiguration().update('fabric.connections', myConnection, vscode.ConfigurationTarget.Global);
+        await vscode.workspace.getConfiguration().update('fabric.connections', [myConnection], vscode.ConfigurationTarget.Global);
 
         treeSpy.should.have.been.called;
     });

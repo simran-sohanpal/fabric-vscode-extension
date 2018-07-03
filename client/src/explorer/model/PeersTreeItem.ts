@@ -12,13 +12,13 @@
  * limitations under the License.
 */
 'use strict';
-import * as vscode from 'vscode';
 import { BlockchainTreeItem } from './BlockchainTreeItem';
+import * as vscode from 'vscode';
 
-export class PeerTreeItem extends BlockchainTreeItem {
-    contextValue = 'blockchain-peer-item';
+export class PeersTreeItem extends BlockchainTreeItem {
+    contextValue = 'blockchain-peers-item';
 
-    constructor(private readonly peerName: any) {
-        super(peerName, vscode.TreeItemCollapsibleState.Collapsed);
+    constructor(public readonly label: string, public readonly peers: Array<string>) {
+        super(label, vscode.TreeItemCollapsibleState.Collapsed);
     }
 }

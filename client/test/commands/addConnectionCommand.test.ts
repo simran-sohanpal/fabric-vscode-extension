@@ -13,6 +13,7 @@
 */
 'use strict';
 import * as vscode from 'vscode';
+import * as path from 'path';
 
 import * as chai from 'chai';
 import * as sinon from 'sinon';
@@ -42,10 +43,12 @@ describe('AddConnectionCommand', () => {
 
             const showInputBoxStub = mySandBox.stub(vscode.window, 'showInputBox');
 
+            const rootPath = path.dirname(__dirname);
+
             showInputBoxStub.onFirstCall().resolves('myConnection');
-            showInputBoxStub.onSecondCall().resolves('connection.json');
-            showInputBoxStub.onThirdCall().resolves('/myCertPath');
-            showInputBoxStub.onCall(3).resolves('/myPrivateKeyPath');
+            showInputBoxStub.onSecondCall().resolves(path.join(rootPath, '../../test/data/connectionOne/connection.json'));
+            showInputBoxStub.onThirdCall().resolves(path.join(rootPath, '../../test/data/connectionOne/credentials/certificate'));
+            showInputBoxStub.onCall(3).resolves(path.join(rootPath, '../../test/data/connectionOne/credentials/privateKey'));
 
             const executeCommandSpy = mySandBox.spy(vscode.commands, 'executeCommand');
 
@@ -56,10 +59,10 @@ describe('AddConnectionCommand', () => {
             connections.length.should.equal(1);
             connections[0].should.deep.equal({
                 name: 'myConnection',
-                connectionProfilePath: 'connection.json',
+                connectionProfilePath: path.join(rootPath, '../../test/data/connectionOne/connection.json'),
                 identities: [{
-                    certificatePath: '/myCertPath',
-                    privateKeyPath: '/myPrivateKeyPath'
+                    certificatePath: path.join(rootPath, '../../test/data/connectionOne/credentials/certificate'),
+                    privateKeyPath: path.join(rootPath, '../../test/data/connectionOne/credentials/privateKey')
                 }]
             });
 
@@ -74,10 +77,12 @@ describe('AddConnectionCommand', () => {
 
             const showInputBoxStub = mySandBox.stub(vscode.window, 'showInputBox');
 
+            const rootPath = path.dirname(__dirname);
+
             showInputBoxStub.onFirstCall().resolves('myConnection');
-            showInputBoxStub.onSecondCall().resolves('connection.json');
-            showInputBoxStub.onThirdCall().resolves('/myCertPath');
-            showInputBoxStub.onCall(3).resolves('/myPrivateKeyPath');
+            showInputBoxStub.onSecondCall().resolves(path.join(rootPath, '../../test/data/connectionOne/connection.json'));
+            showInputBoxStub.onThirdCall().resolves(path.join(rootPath, '../../test/data/connectionOne/credentials/certificate'));
+            showInputBoxStub.onCall(3).resolves(path.join(rootPath, '../../test/data/connectionOne/credentials/privateKey'));
 
             const executeCommandSpy = mySandBox.spy(vscode.commands, 'executeCommand');
 
@@ -89,17 +94,17 @@ describe('AddConnectionCommand', () => {
             connections.length.should.equal(1);
             connections[0].should.deep.equal({
                 name: 'myConnection',
-                connectionProfilePath: 'connection.json',
+                connectionProfilePath: path.join(rootPath, '../../test/data/connectionOne/connection.json'),
                 identities: [{
-                    certificatePath: '/myCertPath',
-                    privateKeyPath: '/myPrivateKeyPath'
+                    certificatePath: path.join(rootPath, '../../test/data/connectionOne/credentials/certificate'),
+                    privateKeyPath: path.join(rootPath, '../../test/data/connectionOne/credentials/privateKey')
                 }]
             });
 
             showInputBoxStub.onCall(4).resolves('myConnection2');
-            showInputBoxStub.onCall(5).resolves('connection2.json');
-            showInputBoxStub.onCall(6).resolves('/myCertPath2');
-            showInputBoxStub.onCall(7).resolves('/myPrivateKeyPath2');
+            showInputBoxStub.onCall(5).resolves(path.join(rootPath, '../../test/data/connectionTwo/connection.json'));
+            showInputBoxStub.onCall(6).resolves(path.join(rootPath, '../../test/data/connectionTwo/credentials/certificate'));
+            showInputBoxStub.onCall(7).resolves(path.join(rootPath, '../../test/data/connectionTwo/credentials/privateKey'));
 
             // execute a command to force the extension activation
             await vscode.commands.executeCommand('blockchainExplorer.addConnectionEntry');
@@ -113,18 +118,18 @@ describe('AddConnectionCommand', () => {
             connections.length.should.equal(2);
             connections[0].should.deep.equal({
                 name: 'myConnection',
-                connectionProfilePath: 'connection.json',
+                connectionProfilePath: path.join(rootPath, '../../test/data/connectionOne/connection.json'),
                 identities: [{
-                    certificatePath: '/myCertPath',
-                    privateKeyPath: '/myPrivateKeyPath'
+                    certificatePath: path.join(rootPath, '../../test/data/connectionOne/credentials/certificate'),
+                    privateKeyPath: path.join(rootPath, '../../test/data/connectionOne/credentials/privateKey')
                 }]
             });
             connections[1].should.deep.equal({
                 name: 'myConnection2',
-                connectionProfilePath: 'connection2.json',
+                connectionProfilePath: path.join(rootPath, '../../test/data/connectionTwo/connection.json'),
                 identities: [{
-                    certificatePath: '/myCertPath2',
-                    privateKeyPath: '/myPrivateKeyPath2'
+                    certificatePath: path.join(rootPath, '../../test/data/connectionTwo/credentials/certificate'),
+                    privateKeyPath: path.join(rootPath, '../../test/data/connectionTwo/credentials/privateKey')
                 }]
             });
         });
@@ -184,8 +189,10 @@ describe('AddConnectionCommand', () => {
 
             const showInputBoxStub = mySandBox.stub(vscode.window, 'showInputBox');
 
+            const rootPath = path.dirname(__dirname);
+
             showInputBoxStub.onFirstCall().resolves('myConnection');
-            showInputBoxStub.onSecondCall().resolves('connection.json');
+            showInputBoxStub.onSecondCall().resolves(path.join(rootPath, '../../test/data/connectionTwo/connection.json'));
             showInputBoxStub.onThirdCall().resolves();
 
             const executeCommandSpy = mySandBox.spy(vscode.commands, 'executeCommand');
@@ -209,9 +216,11 @@ describe('AddConnectionCommand', () => {
 
             const showInputBoxStub = mySandBox.stub(vscode.window, 'showInputBox');
 
+            const rootPath = path.dirname(__dirname);
+
             showInputBoxStub.onFirstCall().resolves('myConnection');
-            showInputBoxStub.onSecondCall().resolves('connection.json');
-            showInputBoxStub.onThirdCall().resolves('/myCertPath');
+            showInputBoxStub.onSecondCall().resolves(path.join(rootPath, '../../test/data/connectionTwo/connection.json'));
+            showInputBoxStub.onThirdCall().resolves(path.join(rootPath, '../../test/data/connectionTwo/credentials/certificate'));
             showInputBoxStub.onCall(3).resolves();
 
             const executeCommandSpy = mySandBox.spy(vscode.commands, 'executeCommand');
