@@ -26,18 +26,24 @@
   ],
   "activationEvents": [
     "onView:blockchainExplorer",
-    "onCommand:blockchainExplorer.refreshEntry",
-    "onCommand:blockchainExplorer.connectEntry",
-    "onCommand:blockchainExplorer.addConfigEntry",
-    "onCommand:blockchainExplorer.testEntry"
+    "onCommand:blockchainExplorer.addConnectionEntry"
   ],
   "main": "./out/src/extension",
   "contributes": {
+    "viewsContainers": {
+			"activitybar": [
+				{
+					"id": "blockchain-explorer",
+					"title": "Blockchain Explorer",
+					"icon": "media/conga.png"
+				}
+			]
+		},
     "views": {
-      "explorer": [
+      "blockchain-explorer": [
         {
           "id": "blockchainExplorer",
-          "name": "Blockchain Explorer"
+          "name": "Fabric Explorer"
         }
       ]
     },
@@ -55,7 +61,7 @@
     "commands": [
       {
         "command": "blockchainExplorer.refreshEntry",
-        "title": "Refresh",
+        "title": "Blockchain: Refresh",
         "icon": {
           "light": "resources/light/refresh.svg",
           "dark": "resources/dark/refresh.svg"
@@ -63,15 +69,15 @@
       },
       {
         "command": "blockchainExplorer.connectEntry",
-        "title": "Connect"
+        "title": "Blockchain: Connect"
       },
       {
-        "command": "blockchainExplorer.addConfigEntry",
-        "title": "Add Config"
+        "command": "blockchainExplorer.addConnectionEntry",
+        "title": "Blockchain: Add Connection"
       },
       {
         "command": "blockchainExplorer.testEntry",
-        "title": "Test"
+        "title": "Blockchain: Test"
       }
     ],
     "menus": {
@@ -107,6 +113,8 @@
     "@types/glob": "^5.0.35",
     "@types/mocha": "^2.2.33",
     "@types/node": "^6.0.52",
+    "@types/sinon": "^5.0.1",
+    "@types/sinon-chai": "^3.2.0",
     "angular-tslint-rules": "^1.2.1",
     "chai": "^4.1.2",
     "decache": "^4.4.0",
@@ -116,6 +124,8 @@
     "istanbul": "^0.4.5",
     "license-check-and-add": "2.3.6",
     "remap-istanbul": "^0.11.1",
+    "sinon": "^6.1.0",
+    "sinon-chai": "^3.2.0",
     "ts-node": "^4.1.0",
     "tslint": "^5.9.1",
     "tslint-loader": "^3.3.0",
@@ -139,7 +149,8 @@
       "out",
       ".vscode-test",
       "coverage",
-      "resources"
+      "resources",
+      "test/data"
     ],
     "file_type_method": "EXCLUDE",
     "file_types": [

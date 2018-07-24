@@ -11,26 +11,137 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 */
-import { BlockchainNetworkExplorerProvider } from '../../src/explorer/BlockchainNetworkExplorer';
+
 import * as myExtension from '../../src/extension';
 import * as vscode from 'vscode';
 
 import * as chai from 'chai';
+import * as sinon from 'sinon';
+import * as sinonChai from 'sinon-chai';
 
-const should = chai.should();
+chai.should();
+chai.use(sinonChai);
 
-suite('BlockchainExplorer', () => {
+// tslint:disable no-unused-expression
+describe('BlockchainExplorer', () => {
 
-    test('Test a config tree is created with add network at the end', async () => {
+    describe('getChildren', () => {
 
-        // execute a command to force the extension activation
-        await vscode.commands.executeCommand('blockchainExplorer.refreshEntry');
+        it('should test a config tree is created with add network at the end', async () => {
 
-        const blockchainNetworkExplorerProvider = myExtension.getBlockchainNetworkExplorerProvider();
-        const allChildren = await blockchainNetworkExplorerProvider.getChildren();
+            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
 
-        const addNetwork = allChildren[allChildren.length - 1];
+            const blockchainNetworkExplorerProvider = myExtension.getBlockchainNetworkExplorerProvider();
+            const allChildren = await blockchainNetworkExplorerProvider.getChildren();
 
-        addNetwork.contextValue.should.equal('blockchain-add-config-item');
+            const addNetwork = allChildren[allChildren.length - 1];
+
+            addNetwork.contextValue.should.equal('blockchain-add-config-item');
+        });
+
+        it('should display config that has been added in alphabetical order', async () => {
+
+            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+
+            let connections: Array<any> = vscode.workspace.getConfiguration().get('fabric.connections');
+            connections = [];
+
+            connections.push({
+                name: 'myConnectionB',
+                connectionProfilePath: '../data/connectionTwo/connection.json',
+                certificatePath: '../data/connectionTwo/credentials/certificate',
+                privateKeyPath: '../data/connectionTwo/credentials/privateKey'
+            });
+
+            connections.push({
+                name: 'myConnectionC',
+                connectionProfilePath: '../data/connectionOne/connection.json',
+                certificatePath: '../data/connectionOne/credentials/certificate',
+                privateKeyPath: '../data/connectionOne/credentials/privateKey'
+            });
+
+            connections.push({
+                name: 'myConnectionA',
+                connectionProfilePath: '../data/connectionTwo/connection.json',
+                certificatePath: '../data/connectionTwo/credentials/certificate',
+                privateKeyPath: '../data/connectionTwo/credentials/privateKey'
+            });
+
+            connections.push({
+                name: 'myConnectionA',
+                connectionProfilePath: '../data/connectionTwo/connection.json',
+                certificatePath: '../data/connectionTwo/credentials/certificate',
+                privateKeyPath: '../data/connectionTwo/credentials/privateKey'
+            });
+
+            await vscode.workspace.getConfiguration().update('fabric.connections', connections, vscode.ConfigurationTarget.Global);
+
+            const blockchainNetworkExplorerProvider = myExtension.getBlockchainNetworkExplorerProvider();
+            const allChildren = await blockchainNetworkExplorerProvider.getChildren();
+
+            allChildren.length.should.equal(5);
+            allChildren[0].label.should.equal('myConnectionA');
+            allChildren[1].label.should.equal('myConnectionA');
+            allChildren[2].label.should.equal('myConnectionB');
+            allChildren[3].label.should.equal('myConnectionC');
+            allChildren[4].label.should.equal('Add new network');
+        });
+    });
+
+    describe('refresh', () => {
+
+        let mySandBox;
+
+        beforeEach(() => {
+            mySandBox = sinon.createSandbox();
+        });
+
+        afterEach(() => {
+            mySandBox.restore();
+        });
+
+        it('should test the tree is refreshed when the refresh command is run', async () => {
+
+            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+
+            const blockchainNetworkExplorerProvider = myExtension.getBlockchainNetworkExplorerProvider();
+
+            const onDidChangeTreeDataSpy = mySandBox.spy(blockchainNetworkExplorerProvider['_onDidChangeTreeData'], 'fire');
+
+            await vscode.commands.executeCommand('blockchainExplorer.refreshEntry');
+
+            onDidChangeTreeDataSpy.should.have.been.called;
+        });
+
+        xit('should test the tree is refreshed when the refresh button is pressed', async () => {
+
+            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+
+            // TODO work out how to press the refresh button;
+            'true'.should.equal(false);
+        });
+
+        it('should test when a config is added the list is refreshed', async () => {
+
+            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+
+            // reset the available connections
+            await vscode.workspace.getConfiguration().update('fabric.connections', [], vscode.ConfigurationTarget.Global);
+
+            const showInputBoxStub = mySandBox.stub(vscode.window, 'showInputBox');
+
+            showInputBoxStub.onFirstCall().resolves('myConnection');
+            showInputBoxStub.onSecondCall().resolves('connection.json');
+            showInputBoxStub.onThirdCall().resolves('/myCertPath');
+            showInputBoxStub.onCall(3).resolves('/myPrivateKeyPath');
+
+            const blockchainNetworkExplorerProvider = myExtension.getBlockchainNetworkExplorerProvider();
+
+            const onDidChangeTreeDataSpy = mySandBox.spy(blockchainNetworkExplorerProvider['_onDidChangeTreeData'], 'fire');
+
+            await vscode.commands.executeCommand('blockchainExplorer.addConnectionEntry');
+
+            onDidChangeTreeDataSpy.should.have.been.called;
+        });
     });
 });

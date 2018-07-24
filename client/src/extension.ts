@@ -13,32 +13,34 @@
 */
 'use strict';
 
-import {
-    ExtensionContext,
-    workspace,
-    commands,
-    window,
-} from 'vscode';
+import * as vscode from 'vscode';
 import { BlockchainNetworkExplorerProvider } from './explorer/BlockchainNetworkExplorer';
-import { addConfig } from './commands/addConfigCommand';
+import { addConnection } from './commands/addConnectionCommand';
 
 let blockchainNetworkExplorerProvider;
 
-export function activate(): void {
+export function activate(context: vscode.ExtensionContext): void {
     console.log('CLIENT activate!!!');
 
     blockchainNetworkExplorerProvider = new BlockchainNetworkExplorerProvider();
 
-    window.registerTreeDataProvider('blockchainExplorer', blockchainNetworkExplorerProvider);
-    commands.registerCommand('blockchainExplorer.refreshEntry', () => blockchainNetworkExplorerProvider.refresh());
-    commands.registerCommand('blockchainExplorer.connectEntry', (config) => blockchainNetworkExplorerProvider.connect(config));
-    commands.registerCommand('blockchainExplorer.addConfigEntry', addConfig);
-    commands.registerCommand('blockchainExplorer.testEntry', (data) => blockchainNetworkExplorerProvider.test(data));
+    vscode.window.registerTreeDataProvider('blockchainExplorer', blockchainNetworkExplorerProvider);
+    vscode.commands.registerCommand('blockchainExplorer.refreshEntry', () => blockchainNetworkExplorerProvider.refresh());
+    vscode.commands.registerCommand('blockchainExplorer.connectEntry', (config) => blockchainNetworkExplorerProvider.connect(config));
+    vscode.commands.registerCommand('blockchainExplorer.addConnectionEntry', addConnection);
+    vscode.commands.registerCommand('blockchainExplorer.testEntry', (data) => blockchainNetworkExplorerProvider.test(data));
+
+    context.subscriptions.push(vscode.workspace.onDidChangeConfiguration((e) => {
+
+        if (e.affectsConfiguration('fabric.connections')) {
+            return vscode.commands.executeCommand('blockchainExplorer.refreshEntry');
+        }
+    }));
 }
 
 /*
  * Needed for testing
  */
-export function getBlockchainNetworkExplorerProvider() {
+export function getBlockchainNetworkExplorerProvider(): BlockchainNetworkExplorerProvider {
     return blockchainNetworkExplorerProvider;
 }

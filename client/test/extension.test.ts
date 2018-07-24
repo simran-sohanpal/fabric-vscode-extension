@@ -12,16 +12,31 @@
  * limitations under the License.
 */
 import * as vscode from 'vscode';
+import * as myExtension from '../src/extension';
 
 import * as chai from 'chai';
+import * as sinon from 'sinon';
+import * as sinonChai from 'sinon-chai';
 
-const should = chai.should();
+chai.should();
+chai.use(sinonChai);
 
+// tslint:disable no-unused-expression
 // Defines a Mocha test suite to group tests of similar kind together
-suite('Extension Tests', () => {
+describe('Extension Tests', () => {
+
+    let mySandBox;
+
+    beforeEach(() => {
+        mySandBox = sinon.createSandbox();
+    });
+
+    afterEach(() => {
+        mySandBox.restore();
+    });
 
     // Defines a Mocha unit test
-    test('Check all the commands are registered', async () => {
+    it('should check all the commands are registered', async () => {
 
         // execute a command to force the extension activation
         await vscode.commands.executeCommand('blockchainExplorer.refreshEntry');
@@ -35,7 +50,28 @@ suite('Extension Tests', () => {
         blockchainCommands.should.deep.equal([
             'blockchainExplorer.refreshEntry',
             'blockchainExplorer.connectEntry',
-            'blockchainExplorer.addConfigEntry',
+            'blockchainExplorer.addConnectionEntry',
             'blockchainExplorer.testEntry']);
+    });
+
+    it('should refresh the tree when a configuration is added', async () => {
+        await vscode.workspace.getConfiguration().update('fabric.connections', [], vscode.ConfigurationTarget.Global);
+
+        await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+
+        const treeDataProvider = myExtension.getBlockchainNetworkExplorerProvider();
+
+        const treeSpy = mySandBox.spy(treeDataProvider['_onDidChangeTreeData'], 'fire');
+
+        const config = [{
+            name: 'myConnection',
+            connectionProfilePath: 'connection.json',
+            certificatePath: '/myCertPath',
+            privateKeyPath: '/myPrivateKeyPath'
+        }];
+
+        await vscode.workspace.getConfiguration().update('fabric.connections', config, vscode.ConfigurationTarget.Global);
+
+        treeSpy.should.have.been.called;
     });
 });
