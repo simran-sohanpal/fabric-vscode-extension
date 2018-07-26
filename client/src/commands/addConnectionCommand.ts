@@ -13,6 +13,7 @@
 */
 'use strict';
 import * as vscode from 'vscode';
+import { showInputBox } from './util';
 
 // TODO: make it save where have got up to
 export async function addConnection(): Promise<{} | void> {
@@ -45,17 +46,10 @@ export async function addConnection(): Promise<{} | void> {
     connections.push({
         name: connectionName,
         connectionProfilePath,
+        identities : [{
         certificatePath,
         privateKeyPath
-    });
+    }]});
 
     return vscode.workspace.getConfiguration().update('fabric.connections', connections, vscode.ConfigurationTarget.Global);
-}
-
-function showInputBox(question: string): Thenable<string | undefined> {
-    const inputBoxOptions = {
-        prompt: question
-    };
-
-    return vscode.window.showInputBox(inputBoxOptions);
 }

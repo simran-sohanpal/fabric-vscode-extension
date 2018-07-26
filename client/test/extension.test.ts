@@ -13,6 +13,7 @@
 */
 import * as vscode from 'vscode';
 import * as myExtension from '../src/extension';
+import * as path from 'path';
 
 import * as chai from 'chai';
 import * as sinon from 'sinon';
@@ -51,6 +52,8 @@ describe('Extension Tests', () => {
             'blockchainExplorer.refreshEntry',
             'blockchainExplorer.connectEntry',
             'blockchainExplorer.addConnectionEntry',
+            'blockchainExplorer.deleteConnectionEntry',
+            'blockchainExplorer.addConnectionIdentityEntry',
             'blockchainExplorer.testEntry']);
     });
 
@@ -63,14 +66,18 @@ describe('Extension Tests', () => {
 
         const treeSpy = mySandBox.spy(treeDataProvider['_onDidChangeTreeData'], 'fire');
 
-        const config = [{
-            name: 'myConnection',
-            connectionProfilePath: 'connection.json',
-            certificatePath: '/myCertPath',
-            privateKeyPath: '/myPrivateKeyPath'
-        }];
+        const rootPath = path.dirname(__dirname);
 
-        await vscode.workspace.getConfiguration().update('fabric.connections', config, vscode.ConfigurationTarget.Global);
+        const myConnection = {
+            name: 'myConnection',
+            connectionProfilePath: path.join(rootPath, '../../test/data/connectionTwo/connection.json'),
+            identities: [{
+                certificatePath: path.join(rootPath, '../../test/data/connectionTwo/credentials/certificate'),
+                privateKeyPath: path.join(rootPath, '../../test/data/connectionTwo/credentials/privateKey')
+            }]
+        };
+
+        await vscode.workspace.getConfiguration().update('fabric.connections', myConnection, vscode.ConfigurationTarget.Global);
 
         treeSpy.should.have.been.called;
     });

@@ -11,6 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 */
+'use strict';
 import * as vscode from 'vscode';
 
 import * as chai from 'chai';
@@ -56,14 +57,16 @@ describe('AddConnectionCommand', () => {
             connections[0].should.deep.equal({
                 name: 'myConnection',
                 connectionProfilePath: 'connection.json',
-                certificatePath: '/myCertPath',
-                privateKeyPath: '/myPrivateKeyPath'
+                identities: [{
+                    certificatePath: '/myCertPath',
+                    privateKeyPath: '/myPrivateKeyPath'
+                }]
             });
 
             executeCommandSpy.should.have.been.calledWith('blockchainExplorer.refreshEntry');
         });
 
-        it('should test another config can be added', async () => {
+        it('should test another connection can be added', async () => {
             await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
 
             // reset the available connections
@@ -87,8 +90,10 @@ describe('AddConnectionCommand', () => {
             connections[0].should.deep.equal({
                 name: 'myConnection',
                 connectionProfilePath: 'connection.json',
-                certificatePath: '/myCertPath',
-                privateKeyPath: '/myPrivateKeyPath'
+                identities: [{
+                    certificatePath: '/myCertPath',
+                    privateKeyPath: '/myPrivateKeyPath'
+                }]
             });
 
             showInputBoxStub.onCall(4).resolves('myConnection2');
@@ -109,18 +114,22 @@ describe('AddConnectionCommand', () => {
             connections[0].should.deep.equal({
                 name: 'myConnection',
                 connectionProfilePath: 'connection.json',
-                certificatePath: '/myCertPath',
-                privateKeyPath: '/myPrivateKeyPath'
+                identities: [{
+                    certificatePath: '/myCertPath',
+                    privateKeyPath: '/myPrivateKeyPath'
+                }]
             });
             connections[1].should.deep.equal({
                 name: 'myConnection2',
                 connectionProfilePath: 'connection2.json',
-                certificatePath: '/myCertPath2',
-                privateKeyPath: '/myPrivateKeyPath2'
+                identities: [{
+                    certificatePath: '/myCertPath2',
+                    privateKeyPath: '/myPrivateKeyPath2'
+                }]
             });
         });
 
-        it('should test a config can be cancelled when naming connection', async () => {
+        it('should test a connection can be cancelled when naming connection', async () => {
             await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
 
             // reset the available connections
@@ -143,7 +152,7 @@ describe('AddConnectionCommand', () => {
             executeCommandSpy.getCall(0).should.have.been.calledWith('blockchainExplorer.addConnectionEntry');
         });
 
-        it('should test a config can be cancelled when adding profile', async () => {
+        it('should test a connection can be cancelled when adding profile', async () => {
             await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
 
             // reset the available connections
@@ -167,7 +176,7 @@ describe('AddConnectionCommand', () => {
             executeCommandSpy.getCall(0).should.have.been.calledWith('blockchainExplorer.addConnectionEntry');
         });
 
-        it('should test a config can be cancelled when adding certificate', async () => {
+        it('should test a connection can be cancelled when adding certificate', async () => {
             await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
 
             // reset the available connections
@@ -192,7 +201,7 @@ describe('AddConnectionCommand', () => {
             executeCommandSpy.getCall(0).should.have.been.calledWith('blockchainExplorer.addConnectionEntry');
         });
 
-        it('should test a config can be cancelled when adding private key', async () => {
+        it('should test a connection can be cancelled when adding private key', async () => {
             await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
 
             // reset the available connections
