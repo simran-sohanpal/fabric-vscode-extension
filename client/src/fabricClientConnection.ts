@@ -13,14 +13,13 @@
 */
 'use strict';
 import {
-    loadFromConfig, ChannelInfo, ChannelQueryResponse, ChaincodeQueryResponse,
-    ChaincodeInfo, Peer
+    loadFromConfig, ChannelQueryResponse, ChaincodeQueryResponse,
+    Peer, Channel
 } from 'fabric-client';
 import * as fs from 'fs';
 
 const ENCODING = 'utf8';
 
-// TODO: error handling
 export class FabricClientConnection {
 
     private connectionProfilePath: string;
@@ -28,13 +27,14 @@ export class FabricClientConnection {
     private privateKeyPath: string;
     private client: any;
 
-    constructor(configData) {
-        this.connectionProfilePath = configData.connectionProfilePath;
-        this.certificatePath = configData.certificatePath;
-        this.privateKeyPath = configData.privateKeyPath;
+    constructor(connectionData) {
+        this.connectionProfilePath = connectionData.connectionProfilePath;
+        this.certificatePath = connectionData.certificatePath;
+        this.privateKeyPath = connectionData.privateKeyPath;
     }
 
-    async connect() {
+    async connect(): Promise<void> {
+        console.log('connect');
         this.client = await loadFromConfig(this.connectionProfilePath);
         const mspid: string = this.client.getMspid();
         const certString: string = this.loadFileFromDisk(this.certificatePath);
@@ -44,45 +44,84 @@ export class FabricClientConnection {
 
     }
 
-    getAllPeers(): Array<Peer> {
-        return this.client.getPeersForOrg(null);
+    getAllPeerNames(): Array<string> {
+        console.log('getAllPeerNames');
+        const allPeers: Array<Peer> = this.getAllPeers();
+
+        const peerNames: Array<string> = [];
+
+        allPeers.forEach((peer) => {
+            peerNames.push(peer.getName());
+        });
+
+        return peerNames;
     }
 
     getPeer(name: string): Peer {
-        const allPeers = this.getAllPeers();
+        console.log('getPeer', name);
+        const allPeers: Array<Peer> = this.getAllPeers();
 
-        const wantedPeer = allPeers.find((peer) => {
+        return allPeers.find((peer) => {
             return peer.getName() === name;
         });
-
-        return wantedPeer;
     }
 
-    async getAllChannelsForPeer(peerName: string): Promise<Array<ChannelInfo>> {
-        try {
-            // TODO: update this when not just using admin
-            const peer: Peer = this.getPeer(peerName);
-            const channelResponse: ChannelQueryResponse = await this.client.queryChannels(peer, true);
-            return channelResponse.channels;
-        } catch (error) {
-            console.log(error);
-        }
+    async getAllChannelsForPeer(peerName: string): Promise<Array<string>> {
+        console.log('getAllChannelsForPeer', peerName);
+        // TODO: update this when not just using admin
+        const peer: Peer = this.getPeer(peerName);
+        const channelResponse: ChannelQueryResponse = await this.client.queryChannels(peer, true);
+
+        const channelNames: Array<string> = [];
+        console.log(channelResponse);
+        channelResponse.channels.forEach((channel) => {
+            channelNames.push(channel.channel_id);
+        });
+
+        return channelNames;
     }
 
-    async getInstalledChaincode(peer: any): Promise<Array<ChaincodeInfo>> {
-        try {
-            const chaincodeResponse: ChaincodeQueryResponse = await this.client.queryInstalledChaincodes(peer, true);
-            return chaincodeResponse.chaincodes;
-        } catch (error) {
-            console.log(error);
-        }
+    async getInstalledChaincode(peerName: string): Promise<Map<string, Array<string>>> {
+        console.log('getInstalledChaincode', peerName);
+        const installedChainCodes: Map<string, Array<string>> = new Map<string, Array<string>>();
+        const peer: Peer = this.getPeer(peerName);
+        const chaincodeResponse: ChaincodeQueryResponse = await this.client.queryInstalledChaincodes(peer, true);
+        chaincodeResponse.chaincodes.forEach((chaincode) => {
+            if (installedChainCodes.has(chaincode.name)) {
+                installedChainCodes.get(chaincode.name).push(chaincode.version);
+            } else {
+                installedChainCodes.set(chaincode.name, [chaincode.version]);
+            }
+        });
+
+        return installedChainCodes;
+    }
+
+    async getInstantiatedChaincode(channelName: string): Promise<Array<any>> {
+        console.log('getInstantiatedChaincode');
+        const instantiatedChaincodes: Array<any> = [];
+        const channel: Channel = this.getChannel(channelName);
+        // TODO: this needs updating when not using admin
+        const chainCodeResponse: ChaincodeQueryResponse = await channel.queryInstantiatedChaincodes(null, true);
+        chainCodeResponse.chaincodes.forEach((chainCode) => {
+            instantiatedChaincodes.push({name: chainCode.name, version: chainCode.version});
+        });
+
+        return instantiatedChaincodes;
+    }
+
+    private getChannel(channelName: string): Channel {
+        console.log('getChannel', channelName);
+        return this.client.getChannel(channelName);
+    }
+
+    private getAllPeers(): Array<Peer> {
+        console.log('getAllPeers');
+        return this.client.getPeersForOrg(null);
     }
 
     private loadFileFromDisk(path: string): string {
-        try {
-            return fs.readFileSync(path, ENCODING) as string;
-        } catch (error) {
-            console.log(error);
-        }
+        console.log('loadFileFromDisk', path);
+        return fs.readFileSync(path, ENCODING) as string;
     }
 }

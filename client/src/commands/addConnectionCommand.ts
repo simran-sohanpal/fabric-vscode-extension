@@ -18,25 +18,25 @@ import { showInputBox } from './util';
 // TODO: make it save where have got up to
 export async function addConnection(): Promise<{} | void> {
     console.log('addConnection');
-    const connectionName = await showInputBox('Enter a name for the connection');
+    const connectionName: string = await showInputBox('Enter a name for the connection');
 
     if (!connectionName) {
         return Promise.resolve();
     }
 
-    const connectionProfilePath = await showInputBox('Enter a file path to the connection profile json file');
+    const connectionProfilePath: string = await showInputBox('Enter a file path to the connection profile json file');
 
     if (!connectionProfilePath) {
         return Promise.resolve();
     }
 
-    const certificatePath = await showInputBox('Enter a file path to the certificate file');
+    const certificatePath: string = await showInputBox('Enter a file path to the certificate file');
 
     if (!certificatePath) {
         return Promise.resolve();
     }
 
-    const privateKeyPath = await showInputBox('Enter a file path to the private key file');
+    const privateKeyPath: string = await showInputBox('Enter a file path to the private key file');
 
     if (!privateKeyPath) {
         return Promise.resolve();
@@ -46,10 +46,11 @@ export async function addConnection(): Promise<{} | void> {
     connections.push({
         name: connectionName,
         connectionProfilePath,
-        identities : [{
-        certificatePath,
-        privateKeyPath
-    }]});
+        identities: [{
+            certificatePath,
+            privateKeyPath
+        }]
+    });
 
     return vscode.workspace.getConfiguration().update('fabric.connections', connections, vscode.ConfigurationTarget.Global);
 }

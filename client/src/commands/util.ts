@@ -13,6 +13,7 @@
 */
 'use strict';
 import * as vscode from 'vscode';
+import { ParsedCertificate } from '../parsedCertificate';
 
 export function showConnectionQuickPickBox(prompt: string): Thenable<string | undefined> {
     const connections: Array<any> = vscode.workspace.getConfiguration().get('fabric.connections');
@@ -30,6 +31,24 @@ export function showConnectionQuickPickBox(prompt: string): Thenable<string | un
     });
 
     return vscode.window.showQuickPick(connectionNames, quickPickOptions);
+}
+
+export function showIdentityConnectionQuickPickBox(prompt: string, connection: any): Thenable<string | undefined> {
+
+    const quickPickOptions = {
+        ignoreFocusOut: false,
+        canPickMany: false,
+        placeHolder: prompt
+    };
+
+    const identityNames: Array<string> = [];
+
+    connection.identities.forEach((identity) => {
+        const parsedCert: any = new ParsedCertificate(identity.certificatePath);
+        identityNames.push(parsedCert.getCommonName());
+    });
+
+    return vscode.window.showQuickPick(identityNames, quickPickOptions);
 }
 
 export function showInputBox(question: string): Thenable<string | undefined> {

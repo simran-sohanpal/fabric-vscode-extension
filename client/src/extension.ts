@@ -18,6 +18,7 @@ import { BlockchainNetworkExplorerProvider } from './explorer/BlockchainNetworkE
 import { addConnection } from './commands/addConnectionCommand';
 import { deleteConnection } from './commands/deleteConnectionCommand';
 import { addConnectionIdentity } from './commands/addConnectionIdentityCommand';
+import { connect } from './commands/connectCommand';
 
 let blockchainNetworkExplorerProvider;
 
@@ -27,8 +28,9 @@ export function activate(context: vscode.ExtensionContext): void {
     blockchainNetworkExplorerProvider = new BlockchainNetworkExplorerProvider();
 
     vscode.window.registerTreeDataProvider('blockchainExplorer', blockchainNetworkExplorerProvider);
-    vscode.commands.registerCommand('blockchainExplorer.refreshEntry', () => blockchainNetworkExplorerProvider.refresh());
-    vscode.commands.registerCommand('blockchainExplorer.connectEntry', (connection) => blockchainNetworkExplorerProvider.connect(connection));
+    vscode.commands.registerCommand('blockchainExplorer.refreshEntry', (connection) => blockchainNetworkExplorerProvider.refresh(connection));
+    vscode.commands.registerCommand('blockchainExplorer.connectEntry', (connection) => connect(connection));
+    vscode.commands.registerCommand('blockchainExplorer.disconnectEntry', () => blockchainNetworkExplorerProvider.disconnect());
     vscode.commands.registerCommand('blockchainExplorer.addConnectionEntry', addConnection);
     vscode.commands.registerCommand('blockchainExplorer.deleteConnectionEntry', (connection) => deleteConnection(connection));
     vscode.commands.registerCommand('blockchainExplorer.addConnectionIdentityEntry', (connection) => addConnectionIdentity(connection));

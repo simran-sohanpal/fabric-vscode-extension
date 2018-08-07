@@ -1,6 +1,6 @@
 check:
     global:
-        statements: 65.63
-        branches: 77.27
-        functions: 52.38
-        lines: 66.43
+        statements: 90.91
+        branches: 94.49
+        functions: 88.89
+        lines: 94.82
