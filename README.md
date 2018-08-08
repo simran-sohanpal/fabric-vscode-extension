@@ -51,7 +51,8 @@ Below are steps for publishing a release.
 
 
 ## Create a connection to a Fabric network
- fabric-vscode-extension/create fabric connection.png
+![create fabric connection](https://fabric-vscode-extension/create fabric connection.png "Connect a connection to a Fabric network"
+
 
 ## Connect to the network and discover the existing resources
 
@@ -63,6 +64,7 @@ Below are steps for publishing a release.
 
 
 ## Test new chaincode
+
 
 ## License <a name="license"></a>
 Hyperledger Project source code files are made available under the Apache License, Version 2.0 (Apache-2.0), located in the [LICENSE](LICENSE) file. Hyperledger Project documentation files are made available under the Creative Commons Attribution 4.0 International License (CC-BY-4.0), available at http://creativecommons.org/licenses/by/4.0/.
