@@ -41,5 +41,28 @@ Below are steps for publishing a release.
 6. Update button will be shown if you have already installed the same plugin before.
 
 
+## Start a new Fabric chaincode project
+
+
+## Write chaincode
+
+
+## Package chaincode
+
+
+## Create a connection to a Fabric network
+
+
+## Connect to the network and discover the existing resources
+
+
+## Install new chaincode
+
+
+## Instantiate new chaincode
+
+
+## Test new chaincode
+
 ## License <a name="license"></a>
 Hyperledger Project source code files are made available under the Apache License, Version 2.0 (Apache-2.0), located in the [LICENSE](LICENSE) file. Hyperledger Project documentation files are made available under the Creative Commons Attribution 4.0 International License (CC-BY-4.0), available at http://creativecommons.org/licenses/by/4.0/.
