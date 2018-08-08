@@ -51,7 +51,7 @@ Below are steps for publishing a release.
 
 
 ## Create a connection to a Fabric network
-![Create a connection to a Fabric network](https://github.com/simran-sohanpal/fabric-vscode-extension/blob/master/create%20fabric%20connection.png) "Create a connection to a Fabric network"
+![Create a connection to a Fabric network](https://github.com/simran-sohanpal/fabric-vscode-extension/blob/master/create%20fabric%20connection.png "Create a connection to a Fabric network")
 
 ## Connect to the network and discover the existing resources
 
