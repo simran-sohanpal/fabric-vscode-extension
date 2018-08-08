@@ -51,7 +51,7 @@ Below are steps for publishing a release.
 
 
 ## Create a connection to a Fabric network
-(https://user-images.githubusercontent.com/41570203/43839646-8413250c-9b16-11e8-922d-38e3a053d5ef.png)
+
 
 ## Connect to the network and discover the existing resources
 
