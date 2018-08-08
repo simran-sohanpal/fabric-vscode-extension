@@ -38,12 +38,12 @@ describe('AddConnectionIdentityCommand', () => {
         });
 
         it('should test a connection identity can be added via the command', async () => {
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             // reset the available connections
             await vscode.workspace.getConfiguration().update('fabric.connections', [], vscode.ConfigurationTarget.Global);
 
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             let connections: Array<any> = [];
 
@@ -95,12 +95,12 @@ describe('AddConnectionIdentityCommand', () => {
         });
 
         it('should test a config can be cancelled before choosing a connection', async () => {
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             // reset the available connections
             await vscode.workspace.getConfiguration().update('fabric.connections', [], vscode.ConfigurationTarget.Global);
 
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             let connections: Array<any> = [];
 
@@ -144,12 +144,12 @@ describe('AddConnectionIdentityCommand', () => {
         });
 
         it('should test a config can be cancelled on certificate path', async () => {
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             // reset the available connections
             await vscode.workspace.getConfiguration().update('fabric.connections', [], vscode.ConfigurationTarget.Global);
 
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             let connections: Array<any> = [];
 
@@ -196,12 +196,12 @@ describe('AddConnectionIdentityCommand', () => {
         });
 
         it('should test a config can be cancelled when adding private key', async () => {
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             // reset the available connections
             await vscode.workspace.getConfiguration().update('fabric.connections', [], vscode.ConfigurationTarget.Global);
 
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             let connections: Array<any> = [];
 
@@ -249,12 +249,12 @@ describe('AddConnectionIdentityCommand', () => {
         });
 
         it('should be able to add a identity from the tree', async () => {
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             // reset the available connections
             await vscode.workspace.getConfiguration().update('fabric.connections', [], vscode.ConfigurationTarget.Global);
 
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             let connections: Array<any> = [];
 
@@ -311,12 +311,12 @@ describe('AddConnectionIdentityCommand', () => {
         });
 
         it('should show an error if can\'t add the identity', async () => {
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             // reset the available connections
             await vscode.workspace.getConfiguration().update('fabric.connections', [], vscode.ConfigurationTarget.Global);
 
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             let connections: Array<any> = [];
 

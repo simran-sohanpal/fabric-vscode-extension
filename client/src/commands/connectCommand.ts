@@ -13,8 +13,7 @@
 */
 'use strict';
 import * as vscode from 'vscode';
-import { showConnectionQuickPickBox } from './util';
-import { showIdentityConnectionQuickPickBox } from './util';
+import { Util } from './util';
 import { FabricClientConnection } from '../fabricClientConnection';
 import { ParsedCertificate } from '../parsedCertificate';
 
@@ -22,7 +21,7 @@ export async function connect(connection: any): Promise<{} | string | void> {
     console.log('connect');
 
     if (!connection) {
-        const connectionName: string = await showConnectionQuickPickBox('Choose a connection to connect with');
+        const connectionName: string = await Util.showConnectionQuickPickBox('Choose a connection to connect with');
 
         if (!connectionName) {
             return Promise.resolve();
@@ -43,7 +42,7 @@ export async function connect(connection: any): Promise<{} | string | void> {
         };
 
         if (connectionConfig.identities.length > 1) {
-            const identityName = await showIdentityConnectionQuickPickBox('Choose an identity to connect with', connectionConfig);
+            const identityName = await Util.showIdentityConnectionQuickPickBox('Choose an identity to connect with', connectionConfig);
 
             if (!identityName) {
                 return Promise.resolve();

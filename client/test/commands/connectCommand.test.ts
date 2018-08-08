@@ -50,7 +50,7 @@ describe('ConnectCommand', () => {
         });
 
         it('should test the a fabric can be connected to from the command', async () => {
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             const rootPath = path.dirname(__dirname);
 
@@ -82,7 +82,7 @@ describe('ConnectCommand', () => {
         });
 
         it('should test the a fabric can be connected to from the command with multiple identities', async () => {
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             const rootPath = path.dirname(__dirname);
 
@@ -120,7 +120,7 @@ describe('ConnectCommand', () => {
         });
 
         it('should test that can cancel on choosing connection', async () => {
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             const rootPath = path.dirname(__dirname);
 
@@ -148,7 +148,7 @@ describe('ConnectCommand', () => {
         });
 
         it('should test that can be cancelled on choose identity', async () => {
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             const rootPath = path.dirname(__dirname);
 
@@ -181,7 +181,7 @@ describe('ConnectCommand', () => {
         });
 
         it('should test the a fabric can be connected to from the tree', async () => {
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             const rootPath = path.dirname(__dirname);
 
@@ -222,7 +222,7 @@ describe('ConnectCommand', () => {
         });
 
         it('should handle connection not found', async () => {
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             const rootPath = path.dirname(__dirname);
 
@@ -253,7 +253,7 @@ describe('ConnectCommand', () => {
         });
 
         it('should handle identity not found', async () => {
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             const rootPath = path.dirname(__dirname);
 
@@ -290,7 +290,7 @@ describe('ConnectCommand', () => {
         });
 
         it('should handle error from conecting', async () => {
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             const rootPath = path.dirname(__dirname);
 

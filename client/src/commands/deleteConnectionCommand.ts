@@ -13,7 +13,7 @@
 */
 'use strict';
 import * as vscode from 'vscode';
-import { showConnectionQuickPickBox } from './util';
+import {Util} from './util';
 import { ConnectionTreeItem } from '../explorer/model/ConnectionTreeItem';
 
 export async function deleteConnection(connectionItem: ConnectionTreeItem): Promise<{} | void> {
@@ -24,7 +24,7 @@ export async function deleteConnection(connectionItem: ConnectionTreeItem): Prom
     if (connectionItem) {
         connectionToDelete = connectionItem.connection.name;
     } else {
-        connectionToDelete = await showConnectionQuickPickBox('Choose the connection that you want to delete');
+        connectionToDelete = await Util.showConnectionQuickPickBox('Choose the connection that you want to delete');
     }
 
     const connections: Array<any> = vscode.workspace.getConfiguration().get('fabric.connections');

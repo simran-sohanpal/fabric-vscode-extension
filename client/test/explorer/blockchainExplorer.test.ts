@@ -55,7 +55,7 @@ describe('BlockchainExplorer', () => {
 
             it('should test a connection tree is created with add network at the end', async () => {
 
-                await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+                await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
                 const blockchainNetworkExplorerProvider = myExtension.getBlockchainNetworkExplorerProvider();
                 const allChildren = await blockchainNetworkExplorerProvider.getChildren();
@@ -70,7 +70,7 @@ describe('BlockchainExplorer', () => {
 
             it('should display connection that has been added in alphabetical order', async () => {
 
-                await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+                await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
                 const connections: Array<any> = [];
 
@@ -126,7 +126,7 @@ describe('BlockchainExplorer', () => {
             });
 
             it('should display connections with single identities', async () => {
-                await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+                await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
                 const connections: Array<any> = [];
 
@@ -171,7 +171,7 @@ describe('BlockchainExplorer', () => {
 
             it('should display connections with multiple identities', async () => {
 
-                await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+                await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
                 const connections: Array<any> = [];
 
@@ -250,7 +250,7 @@ describe('BlockchainExplorer', () => {
 
             it('should throw an error if cert can\'t be parsed with multiple identities', async () => {
 
-                await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+                await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
                 const connections: Array<any> = [];
 
@@ -297,7 +297,7 @@ describe('BlockchainExplorer', () => {
             });
 
             it('should handle error with tree', async () => {
-                await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+                await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
                 const connections: Array<any> = [];
 
@@ -337,7 +337,7 @@ describe('BlockchainExplorer', () => {
             beforeEach(async () => {
                 mySandBox = sinon.createSandbox();
 
-                await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+                await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
                 const rootPath = path.dirname(__dirname);
 
@@ -577,7 +577,7 @@ describe('BlockchainExplorer', () => {
 
         it('should test the tree is refreshed when the refresh command is run', async () => {
 
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             const blockchainNetworkExplorerProvider = myExtension.getBlockchainNetworkExplorerProvider();
 
@@ -590,7 +590,7 @@ describe('BlockchainExplorer', () => {
 
         it('should test when a connection is added the list is refreshed', async () => {
 
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             // reset the available connections
             await vscode.workspace.getConfiguration().update('fabric.connections', [], vscode.ConfigurationTarget.Global);
@@ -615,7 +615,7 @@ describe('BlockchainExplorer', () => {
 
         it('should test the tree is refreshed when a client connection is passed in', async () => {
 
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             const blockchainNetworkExplorerProvider = myExtension.getBlockchainNetworkExplorerProvider();
 
@@ -698,7 +698,7 @@ describe('BlockchainExplorer', () => {
         });
 
         it('should get a tree item', async () => {
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             const connections: Array<any> = [];
 

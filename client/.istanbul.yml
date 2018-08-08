@@ -1,6 +1,18 @@
+instrumentation:
+    excludes:
+        - ".vscode/*"
+        - "config/*"
+        - "media/*"
+        - "resources/*"
+        - ".vscodeignore"
+        - "*.json"
+        - "icon.png"
+        - "*.txt"
+        - "README.md"
+
 check:
     global:
-        statements: 90.91
-        branches: 94.49
-        functions: 88.89
-        lines: 94.82
+        statements: 91.22
+        branches: 94.97
+        functions: 89.52
+        lines: 95.11

@@ -40,7 +40,7 @@ describe('DeleteConnectionCommand', () => {
         });
 
         it('should test a connection can be deleted from the command', async () => {
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             // reset the available connections
             await vscode.workspace.getConfiguration().update('fabric.connections', [], vscode.ConfigurationTarget.Global);
@@ -82,7 +82,7 @@ describe('DeleteConnectionCommand', () => {
         });
 
         it('should test a connection can be deleted from tree', async () => {
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             // reset the available connections
             await vscode.workspace.getConfiguration().update('fabric.connections', [], vscode.ConfigurationTarget.Global);
@@ -127,7 +127,7 @@ describe('DeleteConnectionCommand', () => {
         });
 
         it('should test delete connection can be cancelled', async () => {
-            await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+            await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
             // reset the available connections
             await vscode.workspace.getConfiguration().update('fabric.connections', [], vscode.ConfigurationTarget.Global);

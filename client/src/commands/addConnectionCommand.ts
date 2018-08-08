@@ -13,30 +13,30 @@
 */
 'use strict';
 import * as vscode from 'vscode';
-import { showInputBox } from './util';
+import {Util} from './util';
 
 // TODO: make it save where have got up to
 export async function addConnection(): Promise<{} | void> {
     console.log('addConnection');
-    const connectionName: string = await showInputBox('Enter a name for the connection');
+    const connectionName: string = await Util.showInputBox('Enter a name for the connection');
 
     if (!connectionName) {
         return Promise.resolve();
     }
 
-    const connectionProfilePath: string = await showInputBox('Enter a file path to the connection profile json file');
+    const connectionProfilePath: string = await Util.showInputBox('Enter a file path to the connection profile json file');
 
     if (!connectionProfilePath) {
         return Promise.resolve();
     }
 
-    const certificatePath: string = await showInputBox('Enter a file path to the certificate file');
+    const certificatePath: string = await Util.showInputBox('Enter a file path to the certificate file');
 
     if (!certificatePath) {
         return Promise.resolve();
     }
 
-    const privateKeyPath: string = await showInputBox('Enter a file path to the private key file');
+    const privateKeyPath: string = await Util.showInputBox('Enter a file path to the private key file');
 
     if (!privateKeyPath) {
         return Promise.resolve();

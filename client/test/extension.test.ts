@@ -56,12 +56,18 @@ describe('Extension Tests', () => {
             'blockchainExplorer.deleteConnectionEntry',
             'blockchainExplorer.addConnectionIdentityEntry',
             'blockchainExplorer.testEntry']);
+
+        // Don't need this if createFabricProject is renamed
+        const createFabricCommand = allCommands.filter((command) => {
+            return command.startsWith('createFabric');
+        });
+        createFabricCommand.should.deep.equal(['createFabricProjectEntry']);
     });
 
     it('should refresh the tree when a connection is added', async () => {
         await vscode.workspace.getConfiguration().update('fabric.connections', [], vscode.ConfigurationTarget.Global);
 
-        await vscode.extensions.getExtension('IBM.blockchain-network-explorer').activate();
+        await vscode.extensions.getExtension('hyperledger.hyperledger-fabric').activate();
 
         const treeDataProvider = myExtension.getBlockchainNetworkExplorerProvider();
 

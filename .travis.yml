@@ -1,6 +1,5 @@
 sudo: false
 os:
-  - osx
   - linux
 
 before_install:
@@ -13,6 +12,8 @@ before_install:
          sh -e /etc/init.d/xvfb start;
          sleep 3;
         fi
+     - npm install -g yo
+     - npm install -g generator-fabric
 install: |
       ./.travis/install.sh
 script: |

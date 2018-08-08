@@ -14,26 +14,37 @@
 'use strict';
 import * as vscode from 'vscode';
 import { ParsedCertificate } from '../parsedCertificate';
+import * as childProcessPromise from 'child-process-promise';
+const exec = childProcessPromise.exec;
 
-export function showConnectionQuickPickBox(prompt: string): Thenable<string | undefined> {
-    const connections: Array<any> = vscode.workspace.getConfiguration().get('fabric.connections');
+export class Util {
 
-    const quickPickOptions = {
-        ignoreFocusOut: false,
-        canPickMany: false,
-        placeHolder: prompt
-    };
+    static showConnectionQuickPickBox(prompt: string): Thenable<string | undefined> {
+        const connections: Array<any> = vscode.workspace.getConfiguration().get('fabric.connections');
 
-    const connectionNames: Array<string> = [];
+        const quickPickOptions = {
+            ignoreFocusOut: false,
+            canPickMany: false,
+            placeHolder: prompt
+        };
 
-    connections.forEach((connection) => {
-        connectionNames.push(connection.name);
-    });
+        const connectionNames: Array<string> = [];
 
-    return vscode.window.showQuickPick(connectionNames, quickPickOptions);
-}
+        connections.forEach((connection) => {
+            connectionNames.push(connection.name);
+        });
 
-export function showIdentityConnectionQuickPickBox(prompt: string, connection: any): Thenable<string | undefined> {
+        return vscode.window.showQuickPick(connectionNames, quickPickOptions);
+    }
+
+    static showInputBox(question: string): Thenable<string | undefined> {
+        const inputBoxOptions = {
+            prompt: question
+        };
+        return vscode.window.showInputBox(inputBoxOptions);
+    }
+
+    static showIdentityConnectionQuickPickBox(prompt: string, connection: any): Thenable<string | undefined> {
 
     const quickPickOptions = {
         ignoreFocusOut: false,
@@ -49,12 +60,11 @@ export function showIdentityConnectionQuickPickBox(prompt: string, connection: a
     });
 
     return vscode.window.showQuickPick(identityNames, quickPickOptions);
-}
+    }
 
-export function showInputBox(question: string): Thenable<string | undefined> {
-    const inputBoxOptions = {
-        prompt: question
-    };
-
-    return vscode.window.showInputBox(inputBoxOptions);
+    // Send shell command
+    static async sendCommand(command: string, cwd?: string): Promise<string> {
+        const result = await exec(command, {cwd: cwd});
+        return result.stdout.trim();
+    }
 }
