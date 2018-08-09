@@ -61,6 +61,7 @@ Below are steps for publishing a release.
 
 ## Instantiate new chaincode
 ![Instantiate new chaincode](https://github.com/simran-sohanpal/fabric-vscode-extension/blob/master/instantiate.png "Instantiate new chaincode")
+![Instantiate new chaincode 2](https://github.com/simran-sohanpal/fabric-vscode-extension/blob/master/instantiate%202.png "Instantiate new chaincode")
 
 ## Test new chaincode
 
