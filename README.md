@@ -57,7 +57,7 @@ Below are steps for publishing a release.
 ![Connect to the network and discover the existing resources](https://github.com/simran-sohanpal/fabric-vscode-extension/blob/master/resources.png "Connect to the network and discover the existing resources")
 
 ## Install new chaincode
-
+![Install new chaincode] (https://github.com/simran-sohanpal/fabric-vscode-extension/blob/master/install%20new%20chaincode.png "Install new chaincode")
 
 ## Instantiate new chaincode
 
