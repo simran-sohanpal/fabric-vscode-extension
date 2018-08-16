@@ -52,11 +52,15 @@ Coming in a later version. See [issue #10](https://github.ibm.com/IBM-Blockchain
 ## Install new chaincode
 <!---Short explanation with code-blocks
 --->
+![Install new chaincode](https://github.com/simran-sohanpal/fabric-vscode-extension/blob/master/install%20chaincode%201.png "Install new chaincode")
+![Install new chaincode](https://github.com/simran-sohanpal/fabric-vscode-extension/blob/master/install%20chaincode%202.png "Install new chaincode")
 <!---Link to docs with further instructions
 --->
 ## Instantiate new chaincode
 <!---Short explanation with code-blocks
 --->
+![Instantiate new chaincode](https://github.com/simran-sohanpal/fabric-vscode-extension/blob/master/instantiate%20chaincode%201.png "Instantiate new chaincode")
+![Instantiate new chaincode](https://github.com/simran-sohanpal/fabric-vscode-extension/blob/master/instantiate%20chaincode%202.png "Instantiate new chaincode")
 <!---Link to docs with further instructions
 --->
 ## Test new chaincode
