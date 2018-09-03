@@ -12,7 +12,7 @@ The IBM Blockchain extension allows a user to write and test chaincode projects 
 ## Start a new Fabric chaincode project
 <!---Short explanation with code-blocks
 --->
-![Start a new Fabric chaincode project](https://github.com/simran-sohanpal/fabric-vscode-extension/blob/master/smart_contract_project.gif "Start a new Fabric chaincode project")
+
 <!---Link to docs with further instructions
 --->
 ## Edit/ write chaincode files
