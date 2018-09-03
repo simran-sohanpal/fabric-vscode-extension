@@ -22,6 +22,7 @@ The IBM Blockchain extension allows a user to write and test chaincode projects 
 <!---Link to docs with further instructions
 --->
 ## Create a package from a chaincode project
+Coming in a later version. See [issue #2](https://github.ibm.com/IBM-Blockchain/fabric-vscode-extension/issues/2) 
 <!---Short explanation with code-blocks
 --->
 <!---Screenshot of UI/Video of prototype click-through 
