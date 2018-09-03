@@ -19,8 +19,7 @@ The IBM Blockchain extension allows a user to write and test chaincode projects 
 ## Edit/ write chaincode files
 <!---Short explanation with code-blocks
 --->
-<!---Screenshot of UI/Video of prototype click-through 
---->
+![Edit chaincode files](https://github.com/simran-sohanpal/fabric-vscode-extension/blob/master/4%20.edit%20chaincode.png "Edit chaincode files")
 <!---Link to docs with further instructions
 --->
 ## Create a package from a chaincode project
